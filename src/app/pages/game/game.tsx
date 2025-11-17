@@ -363,10 +363,8 @@ const Game = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-[#1f1f1f] flex flex-col items-center justify-start p-4 md:flex-row md:justify-center md:gap-10">
-      {/* --- HUD PANEL (Desktop + Mobile Top) --- */}
+    <div className="h-screen w-full bg-[#1f1f1f] flex flex-col items-center justify-start p-4 md:justify-center md:gap-10">
       <div className="w-full max-w-md md:max-w-xs flex justify-between items-center mb-4 text-white">
-        {/* Left buttons */}
         <div className="flex gap-2">
           <Button
             onClick={handleLogoutClicked}
@@ -390,14 +388,12 @@ const Game = () => {
           </Button>
         </div>
 
-        {/* Score */}
         <div className="flex flex-col items-center">
           <h3 className="text-sm text-zinc-400">Score</h3>
           <div className="text-2xl font-mono">{score}</div>
         </div>
       </div>
 
-      {/* --- NEXT Preview Panel (stay where it was) --- */}
       <div className="w-full max-w-md md:max-w-xs flex justify-center gap-5 items-start mb-4 text-white">
         <div className="flex flex-col items-center">
           <h3 className="text-sm text-zinc-400">Next</h3>
@@ -415,7 +411,6 @@ const Game = () => {
         </div>
       </div>
 
-      {/* --- MAIN GAME CANVAS --- */}
       <div className="relative">
         <canvas
           ref={canvasRef}
@@ -427,7 +422,6 @@ const Game = () => {
           }}
         />
 
-        {/* Pause / Game Over Overlay */}
         {(!running || gameOver) && (
           <div className="absolute inset-0 flex items-center justify-center rounded-xl">
             <div className="absolute inset-0 bg-black/70 rounded-xl backdrop-blur-sm" />
@@ -452,7 +446,6 @@ const Game = () => {
         )}
       </div>
 
-      {/* --- MOBILE CONTROLS --- */}
       <div className="fixed bottom-4 left-0 right-0 flex justify-center md:hidden">
         <div className="flex gap-4 bg-[#2a2a2a] p-3 rounded-2xl shadow-lg border border-[#333]">
           <Button
