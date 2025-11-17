@@ -10,7 +10,6 @@ import {
   rotateTetromino,
 } from "@/utils/tetris";
 import {
-  COLORS,
   COLS,
   GRID,
   POINTS,
@@ -236,7 +235,29 @@ const Game = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d")!;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const displayWidth = Math.max(1, Math.round(rect.width));
+    const displayHeight = Math.max(1, Math.round(rect.height));
+
+    const backingWidth = Math.round(displayWidth * dpr);
+    const backingHeight = Math.round(displayHeight * dpr);
+
+    if (canvas.width !== backingWidth || canvas.height !== backingHeight) {
+      canvas.width = backingWidth;
+      canvas.height = backingHeight;
+
+      canvas.style.width = `${displayWidth}px`;
+      canvas.style.height = `${displayHeight}px`;
+    }
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     // draw playfield
@@ -288,6 +309,7 @@ const Game = () => {
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d")!;
+    ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (!p) return;
@@ -300,12 +322,16 @@ const Game = () => {
     const offsetX = (canvas.width - pw) / 2;
     const offsetY = (canvas.height - ph) / 2;
 
-    ctx.fillStyle = COLORS[p];
-
     for (let r = 0; r < matrix.length; r++) {
       for (let c = 0; c < matrix[r].length; c++) {
         if (matrix[r][c]) {
-          ctx.fillRect(offsetX + c * size, offsetY + r * size, size, size);
+          ctx.drawImage(
+            IMAGES[p],
+            offsetX + c * size,
+            offsetY + r * size,
+            size,
+            size
+          );
         }
       }
     }
@@ -403,7 +429,6 @@ const Game = () => {
             height={GRID * 4}
             className="block rounded-md border border-[#333]"
             style={{
-              imageRendering: "pixelated",
               width: "60px",
               height: "60px",
             }}
@@ -417,9 +442,6 @@ const Game = () => {
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
           className="rounded-xl border border-[#444] bg-black shadow-xl"
-          style={{
-            imageRendering: "pixelated",
-          }}
         />
 
         {(!running || gameOver) && (
