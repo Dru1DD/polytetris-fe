@@ -19,8 +19,6 @@ import {
   CANVAS_HEIGHT,
   DROP_SPEED,
   IMAGES,
-  PREVIEW_HEIGHT,
-  PREVIEW_WIDTH,
 } from "@/constants/tetris";
 import type { Piece } from "@/types/piece";
 
