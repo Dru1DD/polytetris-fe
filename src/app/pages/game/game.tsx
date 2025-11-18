@@ -19,6 +19,8 @@ import {
   CANVAS_HEIGHT,
   DROP_SPEED,
   IMAGES,
+  PREVIEW_HEIGHT,
+  PREVIEW_WIDTH,
 } from "@/constants/tetris";
 import type { Piece } from "@/types/piece";
 
@@ -45,6 +47,60 @@ const Game = () => {
     setPlayfield(createPlayfield());
     setPiece(next());
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function resize() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+
+    const cssWidth = Math.min(window.innerWidth, CANVAS_WIDTH);
+    const cssHeight = Math.min(window.innerHeight, CANVAS_HEIGHT);
+
+    const scale = Math.min(cssWidth / CANVAS_WIDTH, cssHeight / CANVAS_HEIGHT);
+
+    canvas.width = CANVAS_WIDTH * dpr;
+    canvas.height = CANVAS_HEIGHT * dpr;
+
+    canvas.style.width = `${CANVAS_WIDTH * scale}px`;
+    canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
+
+    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+  }
+
+  function resizePreview() {
+    const previewCanvas = canvasRef.current;
+    if (!previewCanvas) return;
+
+    const ctx = previewCanvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+
+    const cssWidth = Math.min(window.innerWidth, PREVIEW_WIDTH);
+    const cssHeight = Math.min(window.innerHeight, PREVIEW_HEIGHT);
+
+    const scale = Math.min(
+      cssWidth / PREVIEW_WIDTH,
+      cssHeight / PREVIEW_HEIGHT
+    );
+
+    previewCanvas.width = PREVIEW_WIDTH * dpr;
+    previewCanvas.height = PREVIEW_HEIGHT * dpr;
+
+    previewCanvas.style.width = `${PREVIEW_WIDTH * scale}px`;
+    previewCanvas.style.height = `${PREVIEW_HEIGHT * scale}px`;
+
+    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+  }
+
+  useEffect(() => {
+    resize();
+    resizePreview();
   }, []);
 
   // input
@@ -389,8 +445,8 @@ const Game = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-[#1f1f1f] flex flex-col items-center justify-start p-4 md:justify-center md:gap-10">
-      <div className="w-full max-w-md md:max-w-xs flex justify-between items-center mb-4 text-white">
+    <div className="h-screen w-full bg-[#1f1f1f] flex flex-col items-center justify-start p-4 md:justify-center md:gap-1">
+      <div className="w-full max-w-md md:max-w-xs flex justify-between items-center mb-4 md:mb-0 text-white">
         <div className="flex gap-2">
           <Button
             onClick={handleLogoutClicked}
@@ -420,7 +476,7 @@ const Game = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-md md:max-w-xs flex justify-center gap-5 items-start mb-4 text-white">
+      <div className="w-full max-w-md md:max-w-xs flex justify-center gap-5 items-start mb-4 md:mb-0 text-white">
         <div className="flex flex-col items-center">
           <h3 className="text-sm text-zinc-400">Next</h3>
           <canvas

@@ -75,6 +75,9 @@ export const POINTS = 100;
 export const CANVAS_WIDTH = COLS * GRID;
 export const CANVAS_HEIGHT = ROWS * GRID;
 
+export const PREVIEW_WIDTH = 60;
+export const PREVIEW_HEIGHT = 60;
+
 export const DROP_SPEED = 500;
 
 
