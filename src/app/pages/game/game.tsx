@@ -391,31 +391,34 @@ const Game = () => {
     navigate("/");
   };
 
-  const handleMobileControllerClicked = (
-    buttonType: "left" | "rotate" | "right"
-  ) => {
-    if (buttonType === "left") {
-      if (!piece || !running) return;
-      const moved = { ...piece, col: piece.col - 1 };
-      if (!hasCollision(playfield, moved)) setPiece(moved);
-    }
+  // NAVIGATION
 
-    if (buttonType === "rotate") {
-      if (!piece || !running) return;
-      const rotated = {
-        ...piece,
-        matrix: rotateTetromino(piece.matrix),
-      };
-      if (!hasCollision(playfield, rotated)) setPiece(rotated);
-    }
-
-    if (buttonType === "right") {
-      if (!piece || !running) return;
-      const moved = { ...piece, col: piece.col + 1 };
-      if (!hasCollision(playfield, moved)) setPiece(moved);
-    }
+  const handleLeftButtonClicked = () => {
+    if (!piece || !running) return;
+    const moved = { ...piece, col: piece.col - 1 };
+    if (!hasCollision(playfield, moved)) setPiece(moved);
   };
 
+  const handleRightButtonClicked = () => {
+    if (!piece || !running) return;
+    const moved = { ...piece, col: piece.col + 1 };
+    if (!hasCollision(playfield, moved)) setPiece(moved);
+  };
+
+  const handleRotateButtonClicked = () => {
+    if (!piece || !running) return;
+    const rotated = {
+      ...piece,
+      matrix: rotateTetromino(piece.matrix),
+    };
+    if (!hasCollision(playfield, rotated)) setPiece(rotated);
+  };
+
+  const handleDownButtonClicked = () => {
+    if (!piece || !running) return;
+    const rotated = { ...piece, matrix: rotateTetromino(piece.matrix) };
+    if (!hasCollision(playfield, rotated)) setPiece(rotated);
+  };
   return (
     <div className="h-screen w-full bg-[#1f1f1f] flex flex-col items-center justify-start p-4 md:justify-center md:gap-1">
       <div className="w-full max-w-md md:max-w-xs flex justify-between items-center mb-4 md:mb-0 text-white">
@@ -441,14 +444,6 @@ const Game = () => {
             Reset
           </Button>
         </div>
-
-        <div className="flex flex-col items-center">
-          <h3 className="text-sm text-zinc-400">Score</h3>
-          <div className="text-2xl font-mono">{score}</div>
-        </div>
-      </div>
-
-      <div className="w-full max-w-md md:max-w-xs flex justify-center gap-5 items-start mb-4 md:mb-0 text-white">
         <div className="flex flex-col items-center">
           <h3 className="text-sm text-zinc-400">Next</h3>
           <canvas
@@ -461,6 +456,11 @@ const Game = () => {
               height: "60px",
             }}
           />
+        </div>
+
+        <div className="flex flex-col items-center">
+          <h3 className="text-sm text-zinc-400">Score</h3>
+          <div className="text-2xl font-mono">{score}</div>
         </div>
       </div>
 
@@ -499,21 +499,27 @@ const Game = () => {
       <div className="fixed bottom-4 left-0 right-0 flex justify-center md:hidden">
         <div className="flex gap-4 bg-[#2a2a2a] p-3 rounded-2xl shadow-lg border border-[#333]">
           <Button
-            onClick={() => handleMobileControllerClicked("left")}
+            onClick={handleLeftButtonClicked}
             className="w-16 h-16 bg-[#444] hover:bg-[#555] text-xl"
           >
             ←
           </Button>
 
           <Button
-            onClick={() => handleMobileControllerClicked("rotate")}
+            onClick={handleRotateButtonClicked}
             className="w-16 h-16 bg-[#444] hover:bg-[#555] text-xl"
           >
-            ↻
+            ↑
+          </Button>
+          <Button
+            onClick={handleDownButtonClicked}
+            className="w-16 h-16 bg-[#444] hover:bg-[#555] text-xl"
+          >
+            ↓
           </Button>
 
           <Button
-            onClick={() => handleMobileControllerClicked("right")}
+            onClick={handleRightButtonClicked}
             className="w-16 h-16 bg-[#444] hover:bg-[#555] text-xl"
           >
             →
