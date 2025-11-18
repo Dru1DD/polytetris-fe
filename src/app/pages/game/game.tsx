@@ -72,32 +72,6 @@ const Game = () => {
     ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
   }
 
-  function resizePreview() {
-    const previewCanvas = canvasRef.current;
-    if (!previewCanvas) return;
-
-    const ctx = previewCanvas.getContext("2d");
-    if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-
-    const cssWidth = Math.min(window.innerWidth, PREVIEW_WIDTH);
-    const cssHeight = Math.min(window.innerHeight, PREVIEW_HEIGHT);
-
-    const scale = Math.min(
-      cssWidth / PREVIEW_WIDTH,
-      cssHeight / PREVIEW_HEIGHT
-    );
-
-    previewCanvas.width = PREVIEW_WIDTH * dpr;
-    previewCanvas.height = PREVIEW_HEIGHT * dpr;
-
-    previewCanvas.style.width = `${PREVIEW_WIDTH * scale}px`;
-    previewCanvas.style.height = `${PREVIEW_HEIGHT * scale}px`;
-
-    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
-  }
-
   useEffect(() => {
     resize();
     // resizePreview();
