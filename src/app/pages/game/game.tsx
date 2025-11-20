@@ -25,6 +25,7 @@ import {
   CANVAS_HEIGHT,
   DROP_SPEED,
   IMAGES,
+  PREVIEW_LOGICAL_SIZE,
 } from "@/constants/tetris";
 import type { Piece } from "@/types/piece";
 
@@ -53,33 +54,22 @@ const Game = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function resize() {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
+  const adjustCanvasDPR = (
+    canvas: HTMLCanvasElement,
+    logicalWidth: number,
+    logicalHeight: number
+  ) => {
     const dpr = window.devicePixelRatio || 1;
 
-    const cssWidth = Math.min(window.innerWidth, CANVAS_WIDTH);
-    const cssHeight = Math.min(window.innerHeight, CANVAS_HEIGHT);
+    canvas.width = logicalWidth * dpr;
+    canvas.height = logicalHeight * dpr;
 
-    const scale = Math.min(cssWidth / CANVAS_WIDTH, cssHeight / CANVAS_HEIGHT);
-
-    canvas.width = CANVAS_WIDTH * dpr;
-    canvas.height = CANVAS_HEIGHT * dpr;
-
-    canvas.style.width = `${CANVAS_WIDTH * scale}px`;
-    canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
-
-    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
-  }
-
-  useEffect(() => {
-    resize();
-    // resizePreview();
-  }, []);
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingEnabled = false;
+    }
+  };
 
   // input
   useEffect(() => {
@@ -412,6 +402,7 @@ const Game = () => {
             style={{
               width: "60px",
               height: "60px",
+              imageRendering: "pixelated",
             }}
           />
         </div>
@@ -428,6 +419,7 @@ const Game = () => {
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
           className="rounded-xl border border-[#444] bg-black shadow-xl"
+          style={{ imageRendering: "pixelated" }}
         />
 
         {(!running || gameOver) && (
