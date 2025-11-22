@@ -3,6 +3,7 @@ import { useUser } from '@/hooks/use-user';
 import { formatCompactNumber } from '@/utils/number';
 import bagSrc from './assets/bag.png';
 import BagIcon from './assets/bag.svg?react';
+import { useAudio } from '@/hooks/use-audio';
 
 interface MenuProps {
   isGamePaused?: boolean;
@@ -12,6 +13,8 @@ interface MenuProps {
 
 const Menu = ({ isGamePaused, handleContinueGameClicked, handleResetButtonClicked }: MenuProps) => {
   const navigate = useNavigate();
+
+  const { isPlaying, handleSound } = useAudio();
 
   const { user, handleLogout } = useUser();
 
@@ -92,6 +95,12 @@ const Menu = ({ isGamePaused, handleContinueGameClicked, handleResetButtonClicke
           className="w-full p-4 bg-white hover:bg-gray-200 text-black  sprite sprite-shadows cursor-pointer"
         >
           Leaderboard
+        </button>
+        <button
+          onClick={handleSound}
+          className="w-full p-4 bg-white hover:bg-gray-200 text-black  sprite sprite-shadows cursor-pointer"
+        >
+          {isPlaying ? 'Stop' : 'Play'} Music
         </button>
         <button
           onClick={handleOnExitClicked}

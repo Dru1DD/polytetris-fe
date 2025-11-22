@@ -37,7 +37,7 @@ const HomePage = () => {
           Twitter Login
         </button>
 
-        <p className="absolute bottom-0 text-xs text-slate-400 mt-6">© {new Date().getFullYear()} PolyTetris</p>
+        <p className="absolute bottom-0 text-xs text-slate-400 mt-6">© {new Date().getFullYear()} PolyCases</p>
       </div>
     </main>
   );
